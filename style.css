@@ -1,3 +1,7 @@
+body {
+    background: #df7700;
+}
+
 .keyboard {
     position: fixed;
     left: 0;
