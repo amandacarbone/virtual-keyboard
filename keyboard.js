@@ -12,7 +12,8 @@ const keyboard = {
 
     properties: {
         value: "",
-        capsLock: false
+        capsLock: false,
+        specialChar: false
     },
 
     init() {
@@ -22,7 +23,7 @@ const keyboard = {
         this.elements.keysContainer = document.createElement('div');
 
         // setup main elements
-        this.elements.main.classList.add('keyboard', 'keyboardHidden');
+        this.elements.main.classList.add('keyboard', '1keyboardHidden');
         this.elements.keysContainer.classList.add('keyboardKeys');
         this.elements.keysContainer.appendChild(this._createKeys());
 
@@ -49,9 +50,18 @@ const keyboard = {
         const fragment = document.createDocumentFragment();
         const keyLayout = [
             '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'backspace',
-            'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+            'special', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
             'caps', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'enter',
             'done', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '?',
+            'space'
+        ];
+
+        // setup special character keyboard layout
+        const specialCharKeyLayout = [
+            '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'backspace',
+            'special', '+', 'x', '&#247', '=', '/', '_', '<', '>', '[', ']',
+            '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', 'enter',
+            'done', '-', "'", ':', ';', '`', '~', '|', ',', '.', '?',
             'space'
         ];
 
@@ -125,6 +135,17 @@ const keyboard = {
                 
                 break;
 
+                case 'special':
+                    keyElement.classList.add('keyboardKeyWide');
+                    keyElement.innerHTML = createIconHTML('star');
+
+                    keyElement.addEventListener('click', event => {
+                        this._toggleSpecialChar();
+                        keyElement.innerHTML = createIconHTML('abc');
+                    });
+                
+                break;
+
                 default:
                     keyElement.textContent = key.toLowerCase();
 
@@ -159,7 +180,17 @@ const keyboard = {
 
         for(const key of this.elements.keys) {
             if(key.childElementCount === 0) {
-                key.textContent = this.properties.capsLock ? key.textContent.toLowerCase() : key.textContent.toUpperCase();
+                key.textContent = this.properties.capsLock ? key.textContent.toUpperCase() : key.textContent.toLowerCase();
+            }
+        }
+    },
+
+    _toggleSpecialChar() {
+        this.properties.specialChar = !this.properties.specialChar;
+
+        for(const key of this.elements.keys) {
+            if(key.childElementCount === 0) {
+                key.textContent = this.properties.specialChar ? key.textContent.specialCharKeyLayout : key.textContent.toLowerCase();
             }
         }
     },
